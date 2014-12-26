@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="knockout-3.2.0.js"></script>
+</head>
+<body>
+	<form data-bind="submit: addItem">
+		新しいアイテム
+		<input type="text" data-bind="value: itemToAdd, valueUpdate: 'afterkeydown'">
+		<button type="submit" data-bind="enable: itemToAdd().length > 0">追加</button>
+	</form>
+	<h4>アイテム一覧</h4>
+	<select multiple="multiple" width="50" data-bind="options: allItems, selectedOptions: selectedItems"></select>
+	<div>
+		<button data-bind="click:removeSelected, enable: allItems().length > 0">削除</button>
+		<button data-bind="click: sortItems, enable: allItems().length > 1">ソート</button>
+	</div>
+	<script>
+	var BetterListModel = function(){
+		this.itemToAdd = ko.observable("");
+		this.allItems = ko.observableArray(["a","b","c","d","e","f","g","",]);
+		this.selectedItems = ko.observableArray(["c"]);
+
+		this.addItem = function(){
+			if((this.itemToAdd() != "") && (this.allItems.indexOf(this.itemToAdd()) <0)){
+				this.allItems.push(this.itemToAdd());
+			}
+			this.itemToAdd("");
+		};
+
+		this.removeSelected = function(){
+			this.allItems.removeAll(this.selectedItems());
+			this.selectedItems([]);
+		};
+
+		this.sortItems = function(){
+			this.allItems.sort();
+		};
+	};
+
+	ko.applyBindings(new BetterListModel());
+	</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="knockout-3.2.0.js"></script>
+</head>
+<body>
+	<div>クリック回数<span data-bind="text: numberOfClicks">&nbsp;</span>回</div>
+	<button data-bind="click: registerClick, disable: hasClickedTooManyTimes">クリックしてね</button>
+	<div data-bind="visible: hasClickedTooManyTimes">
+		クリックしすぎです!!!!!!
+		<button data-bind="click: resetClicks">リセット</button>
+	</div>
+	<script>
+		var ClickCounterViewModel = function(){
+			this.numberOfClicks = ko.observable(0);
+
+			this.registerClick = function(){
+				this.numberOfClicks(this.numberOfClicks() + 1);
+			};
+
+			this.resetClicks = function(){
+				this.numberOfClicks(0);
+			};
+
+			this.hasClickedTooManyTimes = ko.computed(function(){
+				return this.numberOfClicks() >= 5;
+			},this);
+		};
+
+		ko.applyBindings(new ClickCounterViewModel());
+	</script>
+</body>
+</html>
